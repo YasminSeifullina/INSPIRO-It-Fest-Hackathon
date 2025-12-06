@@ -44,6 +44,19 @@
             background: #f8f9fa;
         }
 
+        .search-filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .search-box {
             width: 100%;
             padding: 15px 20px;
@@ -57,6 +70,27 @@
         .search-box:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            outline: none;
+            transition: 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select:hover {
+            border-color: #667eea;
         }
 
         .universities-grid {
@@ -86,6 +120,16 @@
             color: #667eea;
             margin-bottom: 10px;
             font-size: 1.3em;
+        }
+
+        .specialty-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-top: 10px;
         }
 
         .university-detail {
@@ -303,6 +347,66 @@
         .hidden {
             display: none;
         }
+
+        .featured-universities {
+            padding: 30px;
+            background: #fff;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .featured-card h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .featured-card p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .tour-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .tour-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
@@ -312,28 +416,59 @@
             <p>Выберите университет для подробной информации</p>
         </header>
 
-        <!-- Список университетов -->
         <div id="universityList">
+            <div class="featured-universities">
+                <h2 style="color: #667eea; margin-bottom: 10px;">Посмотрите 3D-туры университетов!</h2>
+                <div class="featured-grid">
+                    <div class="featured-card">
+                        <h3>🎓 Международный Университет Информационных Технологий</h3>
+                        <a href="https://iitu.edu.kz/_static/3d-tour-iitu/" target="_blank" class="tour-btn">Открыть 3D-тур</a>
+                    </div>
+                    <div class="featured-card">
+                        <h3>🎓 Astana IT University</h3>
+                        <a href="https://kuula.co/share/collection/7PDWF?fs=1&vr=1&sd=1&initload=0&thumbs=1&info=0&logo=0" target="_blank" class="tour-btn">Открыть 3D-тур</a>
+                    </div>
+                    <div class="featured-card">
+                        <h3>🎓 Карагандинский Медицинский Университет</h3>
+                        <a href="https://kuula.co/share/collection/71B5B?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1&inst=ru" target="_blank" class="tour-btn">Открыть 3D-тур</a>
+                    </div>
+                    <div class="featured-card">
+                        <h3>🎓 Университет KIMEP</h3>
+                        <a href="https://www.kimep.kz/ru/3d-tour/#pano753/-114.5/30.6/74.4" target="_blank" class="tour-btn">Открыть 3D-тур</a>
+                    </div>
+                </div>
+            </div>
+
             <div class="search-container">
-                <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск университета...">
+                <div class="search-filters">
+                    <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск университета...">
+                    <select class="filter-select" id="specialtyFilter">
+                        <option value="">Все специальности</option>
+                        <option value="it">💻 IT и технологии</option>
+                        <option value="medicine">⚕️ Медицина и здравоохранение</option>
+                        <option value="economics">💼 Экономика и бизнес</option>
+                        <option value="engineering">⚙️ Инженерия и техника</option>
+                        <option value="humanities">📚 Гуманитарные науки</option>
+                        <option value="natural">🔬 Естественные науки</option>
+                        <option value="arts">🎨 Искусство и культура</option>
+                        <option value="law">⚖️ Право и юриспруденция</option>
+                    </select>
+                </div>
             </div>
             <div class="universities-grid" id="universitiesGrid">
                 <div class="loading">⏳ Загрузка данных...</div>
             </div>
         </div>
 
-        <!-- Детальная информация -->
         <div id="universityDetail" class="university-detail">
             <button class="back-btn" onclick="showList()">← Назад к списку</button>
             <div id="detailContent"></div>
         </div>
     </div>
 
-    <!-- Кнопки -->
     <button class="floating-btn chat-btn" id="chatBtn" onclick="openChat()">💬</button>
     <button class="floating-btn compare-btn" onclick="openCompare()">⚖️</button>
 
-    <!-- Модальное окно чата -->
     <div class="modal" id="chatModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeChat()">&times;</span>
@@ -346,7 +481,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно сравнения -->
     <div class="modal" id="compareModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeCompare()">&times;</span>
@@ -366,7 +500,31 @@
         let currentUniversityId = null;
         let chatHistory = [];
 
-        // Загрузка университетов
+        // Категории специальностей
+        const specialtyCategories = {
+            it: ['информатик', 'программ', 'it', 'компьютер', 'software', 'cyber', 'киберб', 'данных', 'искусственн'],
+            medicine: ['медицин', 'врач', 'здравоохр', 'фармац', 'стоматолог', 'сестринск'],
+            economics: ['экономик', 'бизнес', 'финанс', 'бухгалтер', 'менеджмент', 'маркетинг', 'торговл'],
+            engineering: ['инженер', 'техник', 'строительств', 'архитектур', 'машиностро', 'энергетик', 'технолог'],
+            humanities: ['педагог', 'учитель', 'филолог', 'психолог', 'история', 'философ', 'социолог', 'журналист'],
+            natural: ['биолог', 'химия', 'физика', 'математик', 'география', 'экология'],
+            arts: ['искусств', 'культур', 'дизайн', 'музык', 'театр', 'хореограф'],
+            law: ['юрид', 'право', 'юрист', 'правовед']
+        };
+
+        function categorizeUniversity(uni) {
+            const specialtiesLower = (uni.specialties || '').toLowerCase();
+            
+            for (const [category, keywords] of Object.entries(specialtyCategories)) {
+                for (const keyword of keywords) {
+                    if (specialtiesLower.includes(keyword)) {
+                        return category;
+                    }
+                }
+            }
+            return null;
+        }
+
         async function loadUniversities() {
             try {
                 console.log('Загрузка университетов...');
@@ -393,7 +551,6 @@
             }
         }
 
-        // Отображение списка университетов
         function displayUniversities(unis) {
             const grid = document.getElementById('universitiesGrid');
             
@@ -402,15 +559,20 @@
                 return;
             }
             
-            grid.innerHTML = unis.map(uni => `
-                <div class="university-card" onclick="showUniversity(${uni.id})">
-                    <h3>${uni.name || 'Без названия'}</h3>
-                    <p>${(uni.description || 'Описание отсутствует').substring(0, 100)}...</p>
-                </div>
-            `).join('');
+            grid.innerHTML = unis.map(uni => {
+                const category = categorizeUniversity(uni);
+                const categoryBadge = category ? `<span class="specialty-badge">${document.querySelector(`#specialtyFilter option[value="${category}"]`).textContent}</span>` : '';
+                
+                return `
+                    <div class="university-card" onclick="showUniversity(${uni.id})">
+                        <h3>${uni.name || 'Без названия'}</h3>
+                        <p>${(uni.description || 'Описание отсутствует').substring(0, 100)}...</p>
+                        ${categoryBadge}
+                    </div>
+                `;
+            }).join('');
         }
 
-        // Показать детали университета
         async function showUniversity(id) {
             currentUniversityId = id;
             chatHistory = [];
@@ -435,10 +597,11 @@
                     <h1 style="color: #667eea; margin-bottom: 20px;">${data.name}</h1>
                     
                     <div class="detail-section">
-                        <h2>📝 Описание университета</h2>
+                        <h2>📍 Описание университета</h2>
                         <p>${data.description || 'Описание отсутствует'}</p>
                         <p><strong>Сайт:</strong> <a href="${data.website}" target="_blank">${data.website}</a></p>
                         <p><strong>Контакты:</strong> ${data.contacts || 'Не указаны'}</p>
+                        ${data.address ? `<p><strong>Адрес:</strong> ${data.address}</p>` : ''}
                     </div>
                     
                     <div class="detail-section">
@@ -453,7 +616,7 @@
                     </div>
                     
                     <div class="detail-section">
-                        <h2>🌐 Международное сотрудничество</h2>
+                        <h2>🌍 Международное сотрудничество</h2>
                         <p>${data.chatgpt_data?.international_cooperation || 'Информация загружается...'}</p>
                     </div>
                     
@@ -468,7 +631,6 @@
             }
         }
 
-        // Показать список
         function showList() {
             document.getElementById('universityList').classList.remove('hidden');
             document.getElementById('universityDetail').classList.remove('active');
@@ -477,19 +639,26 @@
             chatHistory = [];
         }
 
-        // Поиск
-        document.getElementById('searchInput').addEventListener('input', async (e) => {
-            const search = e.target.value;
-            try {
-                const response = await fetch(`${API_URL}/universities?search=${search}`);
-                const filtered = await response.json();
-                displayUniversities(filtered);
-            } catch (error) {
-                console.error('Ошибка поиска:', error);
-            }
-        });
+        function applyFilters() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            
+            let filtered = universities.filter(uni => {
+                const matchesSearch = !searchValue || 
+                    (uni.name && uni.name.toLowerCase().includes(searchValue)) ||
+                    (uni.description && uni.description.toLowerCase().includes(searchValue));
+                
+                const matchesSpecialty = !specialtyFilter || categorizeUniversity(uni) === specialtyFilter;
+                
+                return matchesSearch && matchesSpecialty;
+            });
+            
+            displayUniversities(filtered);
+        }
 
-        // Чат
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('specialtyFilter').addEventListener('change', applyFilters);
+
         function openChat() {
             if (currentUniversityId === null) return;
             document.getElementById('chatModal').classList.add('active');
@@ -510,7 +679,6 @@
             messagesDiv.innerHTML += `<div class="message user">${message}</div>`;
             input.value = '';
             
-            // Добавляем в историю
             chatHistory.push({role: 'user', content: message});
             
             try {
@@ -532,7 +700,6 @@
                 messagesDiv.innerHTML += `<div class="message bot">${data.response}</div>`;
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
                 
-                // Добавляем ответ в историю
                 chatHistory.push({role: 'assistant', content: data.response});
                 
             } catch (error) {
@@ -541,7 +708,6 @@
             }
         }
 
-        // Сравнение
         function populateSelects() {
             const select1 = document.getElementById('uni1Select');
             const select2 = document.getElementById('uni2Select');
@@ -599,12 +765,10 @@
             }
         }
 
-        // Enter для отправки сообщения
         document.getElementById('chatInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Инициализация
         console.log('Инициализация приложения...');
         loadUniversities();
     </script>

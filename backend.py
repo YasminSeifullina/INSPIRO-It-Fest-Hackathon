@@ -8,7 +8,8 @@ import math
 app = Flask(__name__)
 CORS(app)
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
+
 def fix_nan(value):
     if value is None:
         return ''
@@ -19,16 +20,17 @@ def fix_nan(value):
 def load_university_data():
     try:
         print("Пытаюсь загрузить universities.xlsx...")
-        print(os.listdir())  
+        print("Текущие файлы в директории:", os.listdir())  
 
         df_names = pd.read_excel('universities.xlsx')
         df_data = pd.read_excel('university_data.xlsx')
 
-        print("Файл universities.xlsx загружен:")
-        print(df_names.head())
-
-        print("Файл universities_data.xlsx загружен:")
-        print(df_data.head())
+        print("✅ Файл universities.xlsx загружен")
+        print(f"   Строк в names: {len(df_names)}")
+        
+        print("✅ Файл university_data.xlsx загружен")
+        print(f"   Строк в data: {len(df_data)}")
+        print(f"   Колонки: {list(df_data.columns)}")
 
         universities = []
         for i in range(len(df_names)):
@@ -38,15 +40,23 @@ def load_university_data():
                 'description': fix_nan(df_data.iloc[i, 1] if i < len(df_data) else ''),
                 'specialties': fix_nan(df_data.iloc[i, 2] if i < len(df_data) else ''),
                 'website': fix_nan(df_data.iloc[i, 3] if i < len(df_data) else ''),
-                'contacts': fix_nan(df_data.iloc[i, 4] if i < len(df_data) else '')
+                'contacts': fix_nan(df_data.iloc[i, 4] if i < len(df_data) else ''),
+                'address': fix_nan(df_data.iloc[i, 5] if i < len(df_data) and len(df_data.columns) > 5 else '')
             }
 
             universities.append(uni)
         
+        print(f"✅ Загружено {len(universities)} университетов")
+        if len(universities) > 0:
+            print(f"   Пример: {universities[0]['name']}")
+            print(f"   Адрес: {universities[0]['address'][:50]}..." if universities[0]['address'] else "   Адрес: не указан")
+        
         return universities
 
     except Exception as e:
-        print(f"Ошибка загрузки данных: {e}")
+        print(f"❌ Ошибка загрузки данных: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 
@@ -133,6 +143,7 @@ def chat_with_gpt():
 - Специальности: {university['specialties']}
 - Сайт: {university['website']}
 - Контакты: {university['contacts']}
+- Адрес: {university['address']}
 
 Отвечай подробно, полезно и дружелюбно. Если не знаешь точного ответа, предложи посетить официальный сайт или связаться с приемной комиссией."""
     
@@ -178,12 +189,14 @@ def compare_universities():
 - Специальности: {uni1['specialties']}
 - Сайт: {uni1['website']}
 - Контакты: {uni1['contacts']}
+- Адрес: {uni1['address']}
 
 **Университет 2: {uni2['name']}**
 - Описание: {uni2['description']}
 - Специальности: {uni2['specialties']}
 - Сайт: {uni2['website']}
 - Контакты: {uni2['contacts']}
+- Адрес: {uni2['address']}
 
 Предоставь детальное сравнение по следующим критериям:
 
@@ -191,8 +204,9 @@ def compare_universities():
 2. **Репутация и история**: Престиж, возраст, достижения
 3. **Условия поступления**: Предполагаемые требования и конкурс
 4. **Международное сотрудничество**: Возможности обмена и стажировок
-5. **Карьерные перспективы**: Для каких карьерных целей подходит каждый
-6. **Итоговые рекомендации**: Для кого какой университет лучше подходит
+5. **Расположение**: Анализ локации и доступности
+6. **Карьерные перспективы**: Для каких карьерных целей подходит каждый
+7. **Итоговые рекомендации**: Для кого какой университет лучше подходит
 
 Будь объективным и сбалансированным в оценке."""
     
@@ -220,11 +234,21 @@ def health_check():
     return jsonify({
         'status': 'ok',
         'universities_loaded': len(universities_data),
-        'api': 'OpenAI GPT-3.5-turbo'
+        'api': 'OpenAI GPT-3.5-turbo',
+        'features': ['search', 'chat', 'compare', 'specialty_filter']
     })
 
 if __name__ == '__main__':
-    print(f"Загружено университетов: {len(universities_data)}")
-    print(f"Используется: OpenAI GPT-3.5-turbo")
-    print(f"Сервер запущен на http://localhost:5000")
+    print("=" * 60)
+    print("🎓 Сервер университетов Казахстана")
+    print("=" * 60)
+    print(f"✅ Загружено университетов: {len(universities_data)}")
+    print(f"✅ Используется: OpenAI GPT-3.5-turbo")
+    print(f"✅ Сервер запущен на http://localhost:5000")
+    print("\n📋 Доступные функции:")
+    print("   🔍 Поиск университетов")
+    print("   💬 AI-чат о университетах")
+    print("   ⚖️  Сравнение университетов")
+    print("   🏷️  Фильтр по специальностям")
+    print("=" * 60)
     app.run(debug=True, port=5000, host='0.0.0.0')

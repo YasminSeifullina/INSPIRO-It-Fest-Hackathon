@@ -1,0 +1,9 @@
+flask
+flask-cors
+pandas
+openai
+requests
+beautifulsoup4
+lxml
+numpy
+openpyxl
